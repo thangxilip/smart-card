@@ -9,3 +9,4 @@
 /Users/thangvomac/Documents/thangvd/projects/SmartCard/SmartCard.Domain/obj/Debug/net8.0/refint/SmartCard.Domain.dll
 /Users/thangvomac/Documents/thangvd/projects/SmartCard/SmartCard.Domain/obj/Debug/net8.0/SmartCard.Domain.pdb
 /Users/thangvomac/Documents/thangvd/projects/SmartCard/SmartCard.Domain/obj/Debug/net8.0/ref/SmartCard.Domain.dll
+/Users/thangvomac/Documents/thangvd/projects/SmartCard/SmartCard.Domain/obj/Debug/net8.0/SmartCard.Domain.sourcelink.json

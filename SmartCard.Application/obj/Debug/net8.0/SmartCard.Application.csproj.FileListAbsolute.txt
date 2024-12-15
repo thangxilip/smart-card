@@ -13,3 +13,4 @@
 /Users/thangvomac/Documents/thangvd/projects/SmartCard/SmartCard.Application/obj/Debug/net8.0/refint/SmartCard.Application.dll
 /Users/thangvomac/Documents/thangvd/projects/SmartCard/SmartCard.Application/obj/Debug/net8.0/SmartCard.Application.pdb
 /Users/thangvomac/Documents/thangvd/projects/SmartCard/SmartCard.Application/obj/Debug/net8.0/ref/SmartCard.Application.dll
+/Users/thangvomac/Documents/thangvd/projects/SmartCard/SmartCard.Application/obj/Debug/net8.0/SmartCard.Application.sourcelink.json

@@ -53,3 +53,4 @@
 /Users/thangvomac/Documents/thangvd/projects/SmartCard/SmartCard.Api/bin/Debug/net8.0/SmartCard.Api.staticwebassets.endpoints.json
 /Users/thangvomac/Documents/thangvd/projects/SmartCard/SmartCard.Api/obj/Debug/net8.0/staticwebassets.build.endpoints.json
 /Users/thangvomac/Documents/thangvd/projects/SmartCard/SmartCard.Api/obj/Debug/net8.0/staticwebassets/msbuild.SmartCard.Api.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+/Users/thangvomac/Documents/thangvd/projects/SmartCard/SmartCard.Api/obj/Debug/net8.0/SmartCard.Api.sourcelink.json
