@@ -1,0 +1,6 @@
+@SmartCard_HostAddress = http://localhost:5214
+
+GET {{SmartCard_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

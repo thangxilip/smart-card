@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="13.0.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SmartCard.Application\SmartCard.Application.csproj" />
+      <ProjectReference Include="..\SmartCard.Domain\SmartCard.Domain.csproj" />
+      <ProjectReference Include="..\SmartCard.Infrastructure\SmartCard.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>

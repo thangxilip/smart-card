@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartCard.Api", "SmartCard.Api\SmartCard.Api.csproj", "{3E096E98-A74F-4C91-97A0-651AD0C5FD2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartCard.Application", "SmartCard.Application\SmartCard.Application.csproj", "{2725A480-541E-42E5-8966-A3C41207CB03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartCard.Domain", "SmartCard.Domain\SmartCard.Domain.csproj", "{8BD27CAD-EE94-4999-A7C2-0E3637C8028F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartCard.Infrastructure", "SmartCard.Infrastructure\SmartCard.Infrastructure.csproj", "{D6068391-9F10-42A8-85B7-1312728E0B44}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E096E98-A74F-4C91-97A0-651AD0C5FD2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E096E98-A74F-4C91-97A0-651AD0C5FD2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E096E98-A74F-4C91-97A0-651AD0C5FD2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E096E98-A74F-4C91-97A0-651AD0C5FD2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2725A480-541E-42E5-8966-A3C41207CB03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2725A480-541E-42E5-8966-A3C41207CB03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2725A480-541E-42E5-8966-A3C41207CB03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2725A480-541E-42E5-8966-A3C41207CB03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BD27CAD-EE94-4999-A7C2-0E3637C8028F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BD27CAD-EE94-4999-A7C2-0E3637C8028F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BD27CAD-EE94-4999-A7C2-0E3637C8028F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD27CAD-EE94-4999-A7C2-0E3637C8028F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6068391-9F10-42A8-85B7-1312728E0B44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6068391-9F10-42A8-85B7-1312728E0B44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6068391-9F10-42A8-85B7-1312728E0B44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6068391-9F10-42A8-85B7-1312728E0B44}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
