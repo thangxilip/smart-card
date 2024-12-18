@@ -18,7 +18,7 @@ public static class RegisterDataService
             options.UseNpgsql(dataSource)
                 .UseSnakeCaseNamingConvention());
         
-        // services.AddScoped<ApplicationDbContextInitializer>();
+        services.AddScoped<ApplicationDbContextInitializer>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services
