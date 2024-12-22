@@ -1,10 +1,13 @@
-using Microsoft.AspNetCore.Identity;
 using SmartCard.Domain.Enums;
 
-namespace SmartCard.Infrastructure.Identity;
+namespace SmartCard.Domain.Models.User;
 
-public class User : IdentityUser<Guid>
+public class UserModel
 {
+    public Guid Id { get; set; }
+
+    public string Email { get; set; }
+    
     public string FirstName { get; set; }
 
     public string LastName { get; set; }
@@ -14,6 +17,4 @@ public class User : IdentityUser<Guid>
     public Gender? Gender { get; set; }
     
     public string? Address { get; set; }
-    
-    public string FullName => $"{FirstName} {LastName}";
 }

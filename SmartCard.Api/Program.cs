@@ -1,17 +1,21 @@
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Identity;
 using SmartCard.Application;
 using SmartCard.Domain.Configurations;
 using SmartCard.Infrastructure.Data;
+using SmartCard.Infrastructure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var config = builder.Configuration.Get<AppConfig>() ?? throw new NullReferenceException("Invalid configuration");
+builder.Services.Configure<GoogleSettings>(builder.Configuration.GetSection("Google"));
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddInfrastructureServices(config.ConnectionStrings.Default, builder.Environment);
 builder.Services.AddApplicationServices();
 
-builder.Services.AddAuthentication()
-    .AddBearerToken(IdentityConstants.BearerScheme);
+builder.Services.AddAuthentication();
+builder.Services.AddIdentity<User, Role>()
+    .AddEntityFrameworkStores<AppDbContext>();
+
 builder.Services.AddAuthorizationBuilder();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -28,8 +32,8 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 // var allowOrigins = Configuration.GetValue<string>("AllowOrigins");
 builder.Services.AddCors(x => 
-    x.AddPolicy("CorsPolicy", builder => 
-        builder.WithOrigins("http://localhost:3000")
+    x.AddPolicy("CorsPolicy", policyBuilder => 
+        policyBuilder.WithOrigins("http://localhost:3000", "https://google.com")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()
@@ -49,9 +53,10 @@ if (app.Environment.IsDevelopment())
 app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseCors();
 
 app.Run();

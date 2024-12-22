@@ -11,4 +11,6 @@ public class GetTopicByIdOutput
     public string? Description { get; set; }
     
     public List<BaseCardDto> Cards { get; set; }
+
+    public bool CanDoExercise { get; set; }
 }

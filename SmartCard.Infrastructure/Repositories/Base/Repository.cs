@@ -56,6 +56,11 @@ public class Repository<TEntity, TPrimaryKey>(AppDbContext context)
         return await query.FirstOrDefaultAsync(expression);
     }
     
+    public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken)
+    {
+        return await context.Set<TEntity>().AnyAsync(expression, cancellationToken);
+    }
+    
     public async Task InsertAsync(TEntity entity, CancellationToken cancellationToken)
     {
         await context.Set<TEntity>().AddAsync(entity, cancellationToken);

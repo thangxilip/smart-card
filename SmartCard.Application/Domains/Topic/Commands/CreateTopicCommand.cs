@@ -1,6 +1,7 @@
+using System.Net;
 using MediatR;
+using SmartCard.Application.Common.Exceptions;
 using SmartCard.Application.Dtos.Card;
-using SmartCard.Application.Dtos.Topic;
 using SmartCard.Domain.Constant;
 using SmartCard.Domain.Repositories.Base;
 
@@ -15,6 +16,12 @@ public class CreateTopicCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler
 {
     public async Task<Guid> Handle(CreateTopicCommand request, CancellationToken cancellationToken)
     {
+        var topicExisting = await unitOfWork.TopicRepository.AnyAsync(x => x.Name.ToLower() == request.Name.Trim().ToLower(), cancellationToken);
+        if (topicExisting)
+        {
+            throw new UserFriendlyException(HttpStatusCode.BadRequest, "Topic with the same name already exists");
+        }
+        
         var topic = new Domain.Entities.Topic
         {
             Name = request.Name,

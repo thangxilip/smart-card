@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <NextUIProvider navigate={router.push}>
-      <NextThemesProvider>
+      <NextThemesProvider defaultTheme={"light"}>
         <Component {...pageProps} />
         <ToastContainer
           autoClose={3000}

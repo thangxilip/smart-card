@@ -10,9 +10,7 @@ public class GetStudyCardsByTopicHandler(IUnitOfWork unitOfWork) : IRequestHandl
 {
     public async Task<List<GetCardsForStudyingOutput>> Handle(GetCardsForStudyingQuery request, CancellationToken cancellationToken)
     {
-        var cards = (await unitOfWork.CardRepository.GetAllAsync())
-            .Where(x => x.TopicId == request.TopicId &&
-                        (!x.StartedStudying || x.NextStudyDate <= DateOnly.FromDateTime(DateTime.UtcNow)));
+        var cards = await unitOfWork.CardRepository.GetStudyCardsByTopic(request.TopicId, cancellationToken);
 
         return cards.Select(x => new GetCardsForStudyingOutput
         {

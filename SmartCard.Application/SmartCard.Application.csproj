@@ -17,4 +17,8 @@
       <ProjectReference Include="..\SmartCard.Domain\SmartCard.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Domains\Card\Validators\" />
+    </ItemGroup>
+
 </Project>

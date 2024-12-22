@@ -16,6 +16,8 @@ public interface IRepository<TEntity, TPrimaryKey> where TEntity : BaseEntity<TP
     Task<TEntity?> GetIncludeAsync(Expression<Func<TEntity, bool>> expression,
         params Expression<Func<TEntity, object>>[] includes);
 
+    Task<bool> AnyAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken);
+    
     Task InsertAsync(TEntity entity, CancellationToken cancellationToken);
 
     void Update(TEntity entity);

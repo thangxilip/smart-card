@@ -2,9 +2,9 @@ using SmartCard.Domain.Enums;
 
 namespace SmartCard.Application.Dtos.Card;
 
-public class ExerciseInput
+public class ScoreInput
 {
-    public Guid CardId { get; set; }
+    public Guid Id { get; set; }
 
     public Score Score { get; set; }
 }

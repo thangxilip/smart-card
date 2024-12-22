@@ -26,7 +26,8 @@ public class GetTopicByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<
                 Id = x.Id,
                 Terminology = x.Terminology,
                 Definition = x.Definition
-            }).ToList()
+            }).ToList(),
+            CanDoExercise = (await unitOfWork.CardRepository.GetStudyCardsByTopic(request.Id, cancellationToken)).Any()
         };
     }
 }

@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SmartCard.Application.Domains.Card.Commands;
 using SmartCard.Application.Domains.Card.Queries;
 using SmartCard.Application.Domains.Topic.Commands;
 using SmartCard.Application.Domains.Topic.Queries;
@@ -54,5 +55,13 @@ public class TopicController(IMediator sender, IMapper mapper) : ControllerBase
         var command = new UpdateTopicCommand(input);
         await sender.Send(command);
         return Ok(id);
+    }
+    
+    [HttpPatch("{id}/$score")]
+    public async Task<IActionResult> ScoreAsync([FromRoute] Guid id, List<ScoreInput> cards)
+    {
+        var command = new ScoreCardsCommand(id, cards);
+        await sender.Send(command);
+        return Ok();
     }
 }

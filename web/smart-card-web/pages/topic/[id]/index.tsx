@@ -8,12 +8,13 @@ import { Button } from "@nextui-org/react";
 import apiClient from "@/api/api-instance";
 import { GetAllTopicOutput, GetTopicByIdOutput } from "@/api/service-proxy";
 import DefaultLayout from "@/layouts/default";
+import { Tooltip } from "@nextui-org/tooltip";
 
 const TopicDetail = () => {
   const router = useRouter();
 
   const [topic, setTopic] = useState<GetTopicByIdOutput>(
-    {} as GetAllTopicOutput,
+    {} as GetAllTopicOutput
   );
 
   useEffect(() => {
@@ -42,12 +43,14 @@ const TopicDetail = () => {
             Edit
           </Button>
           <Button
-            color="primary"
             className="ml-2"
+            color="primary"
+            isDisabled={!topic.canDoExercise}
             onPress={() => router.push(`${topic.id}/exercise`)}
           >
             Start studying
           </Button>
+
         </div>
       </div>
       <Divider />

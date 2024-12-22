@@ -23,6 +23,36 @@ export interface CreateTopicInput {
   cards?: BaseCardDto[] | null;
 }
 
+export interface DateOnly {
+  /** @format int32 */
+  year?: number;
+  /** @format int32 */
+  month?: number;
+  /** @format int32 */
+  day?: number;
+  dayOfWeek?: DayOfWeek;
+  /** @format int32 */
+  dayOfYear?: number;
+  /** @format int32 */
+  dayNumber?: number;
+}
+
+export enum DayOfWeek {
+  Sunday = "Sunday",
+  Monday = "Monday",
+  Tuesday = "Tuesday",
+  Wednesday = "Wednesday",
+  Thursday = "Thursday",
+  Friday = "Friday",
+  Saturday = "Saturday",
+}
+
+export enum Gender {
+  Male = "Male",
+  Female = "Female",
+  Others = "Others",
+}
+
 export interface GetAllTopicOutput {
   /** @format uuid */
   id?: string;
@@ -49,6 +79,25 @@ export interface GetTopicByIdOutput {
   name?: string | null;
   description?: string | null;
   cards?: BaseCardDto[] | null;
+  canDoExercise?: boolean;
+}
+
+export interface LoginOutput {
+  accessToken?: string | null;
+}
+
+export enum Score {
+  Forgotten = "Forgotten",
+  Poor = "Poor",
+  Moderate = "Moderate",
+  Good = "Good",
+  Perfect = "Perfect",
+}
+
+export interface ScoreInput {
+  /** @format uuid */
+  id?: string;
+  score?: Score;
 }
 
 export interface UpdateCardDto {
@@ -66,6 +115,17 @@ export interface UpdateTopicInput {
   name?: string | null;
   description?: string | null;
   cards?: UpdateCardDto[] | null;
+}
+
+export interface UserModel {
+  /** @format uuid */
+  id?: string;
+  email?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  dateOfBirth?: DateOnly;
+  gender?: Gender;
+  address?: string | null;
 }
 
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
@@ -207,6 +267,43 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version 1.0
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  auth = {
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name GoogleGenerateLoginUrlList
+     * @request GET:/Auth/google/generate-login-url
+     */
+    googleGenerateLoginUrlList: (params: RequestParams = {}) =>
+      this.request<string, any>({
+        path: `/Auth/google/generate-login-url`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name GoogleExchangeCodeList
+     * @request GET:/Auth/google/exchange-code
+     */
+    googleExchangeCodeList: (
+      query?: {
+        code?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<LoginOutput, any>({
+        path: `/Auth/google/exchange-code`,
+        method: "GET",
+        query: query,
+        format: "json",
+        ...params,
+      }),
+  };
   topic = {
     /**
      * No description
@@ -282,6 +379,38 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     exerciseDetail: (id: string, params: RequestParams = {}) =>
       this.request<GetCardsForStudyingOutput[], any>({
         path: `/Topic/${id}/$exercise`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Topic
+     * @name ScorePartialUpdate
+     * @request PATCH:/Topic/{id}/$score
+     */
+    scorePartialUpdate: (id: string, data: ScoreInput[], params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/Topic/${id}/$score`,
+        method: "PATCH",
+        body: data,
+        type: ContentType.Json,
+        ...params,
+      }),
+  };
+  user = {
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserDetail
+     * @request GET:/User/{email}
+     */
+    userDetail: (email: string, params: RequestParams = {}) =>
+      this.request<UserModel, any>({
+        path: `/User/${email}`,
         method: "GET",
         format: "json",
         ...params,

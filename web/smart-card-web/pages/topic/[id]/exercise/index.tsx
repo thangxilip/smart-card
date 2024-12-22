@@ -4,9 +4,10 @@ import { Card, CardBody, CardFooter, Button } from "@nextui-org/react";
 import { Spacer } from "@nextui-org/spacer";
 
 import DefaultLayout from "@/layouts/default";
-import { GetCardsForStudyingOutput } from "@/api/service-proxy";
+import { GetCardsForStudyingOutput, Score } from "@/api/service-proxy";
 import apiClient from "@/api/api-instance";
 import CongratulationsCard from "@/pages/topic/components/congratulations-card";
+import { HttpStatusCode } from "axios";
 
 const Exercise = () => {
   const router = useRouter();
@@ -32,12 +33,23 @@ const Exercise = () => {
     setShowAnswer(true);
   };
 
-  const onNext = () => {
-    setShowAnswer(false);
-    if (index < cards.length - 1) {
-      setIndex((prev) => prev + 1);
-    } else {
-      setIndex(-1);
+  const onNext = async (score: Score) => {
+    if (cards[index]) {
+      const response = await apiClient.topic.scorePartialUpdate(topicId!, [
+        {
+          id: cards[index].id!,
+          score,
+        }
+      ]);
+
+      if (response.status === HttpStatusCode.Ok) {
+        setShowAnswer(false);
+        if (index < cards.length - 1) {
+          setIndex((prev) => prev + 1);
+        } else {
+          setIndex(-1);
+        }
+      }
     }
   };
 
@@ -74,23 +86,20 @@ const Exercise = () => {
             >
               <Button
                 size={"sm"}
-                onPress={() => {
-                  setShowAnswer(false);
-                  setIndex((prev) => prev + 1);
-                }}
+                onPress={() => onNext(Score.Forgotten)}
               >
                 Forgotten
               </Button>
-              <Button size={"sm"} onPress={onNext}>
+              <Button size={"sm"} onPress={() => onNext(Score.Poor)}>
                 Poor
               </Button>
-              <Button size={"sm"} onPress={onNext}>
+              <Button size={"sm"} onPress={() => onNext(Score.Moderate)}>
                 Moderate
               </Button>
-              <Button size={"sm"} onPress={onNext}>
+              <Button size={"sm"} onPress={() => onNext(Score.Good)}>
                 Good
               </Button>
-              <Button size={"sm"} onPress={onNext}>
+              <Button size={"sm"} onPress={() => onNext(Score.Perfect)}>
                 Perfect
               </Button>
             </CardFooter>
