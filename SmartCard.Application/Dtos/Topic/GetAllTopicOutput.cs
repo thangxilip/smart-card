@@ -8,6 +8,4 @@ public class GetAllTopicOutput
     public int NumberOfCards { get; set; }
 
     public string? Avatar { get; set; }
-
-    public string? Author { get; set; }
 }

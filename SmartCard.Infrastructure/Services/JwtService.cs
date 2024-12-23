@@ -13,6 +13,9 @@ public class JwtService(IOptions<JwtSettings> options) : IJwtService
 {
     public string GenerateJwtToken(UserInfo userInfo)
     {
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.Value.Key));
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Email, userInfo.Email),
@@ -20,14 +23,11 @@ public class JwtService(IOptions<JwtSettings> options) : IJwtService
             new Claim("lastName", userInfo.LastName),
         };
 
-        var credentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.Value.Key)),
-            SecurityAlgorithms.HmacSha256);
-
         var token = new JwtSecurityToken(
             issuer: options.Value.Issuer,
             audience: options.Value.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(options.Value.AccessTokenExpireInHours),
+            expires: DateTime.UtcNow.AddHours(options.Value.AccessTokenExpireInHours),
             signingCredentials: credentials
         );
 

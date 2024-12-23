@@ -3,6 +3,7 @@ using MediatR;
 using SmartCard.Application.Common.Exceptions;
 using SmartCard.Application.Dtos.Card;
 using SmartCard.Domain.Constant;
+using SmartCard.Domain.Interfaces;
 using SmartCard.Domain.Repositories.Base;
 
 namespace SmartCard.Application.Domains.Topic.Commands;
@@ -12,11 +13,14 @@ public record CreateTopicCommand(
     string? Description,
     List<BaseCardDto> Cards) : IRequest<Guid>;
 
-public class CreateTopicCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateTopicCommand, Guid>
+public class CreateTopicCommandHandler(IUnitOfWork unitOfWork, IAppContextService contextService) : IRequestHandler<CreateTopicCommand, Guid>
 {
     public async Task<Guid> Handle(CreateTopicCommand request, CancellationToken cancellationToken)
     {
-        var topicExisting = await unitOfWork.TopicRepository.AnyAsync(x => x.Name.ToLower() == request.Name.Trim().ToLower(), cancellationToken);
+        var topicExisting = await unitOfWork.TopicRepository.AnyAsync(x =>
+            x.CreatedBy == contextService.UserId &&
+            x.Name.ToLower() == request.Name.Trim().ToLower(),
+            cancellationToken);
         if (topicExisting)
         {
             throw new UserFriendlyException(HttpStatusCode.BadRequest, "Topic with the same name already exists");
@@ -26,6 +30,7 @@ public class CreateTopicCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler
         {
             Name = request.Name,
             Description = request.Description,
+            CreatedBy = contextService.UserId,
             Cards = new List<Domain.Entities.Card>()
         };
         await unitOfWork.TopicRepository.InsertAsync(topic, cancellationToken);
@@ -41,7 +46,8 @@ public class CreateTopicCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler
                 EasinessFactor = AppConstant.InitialEasinessFactor,
                 CurrentInterval = AppConstant.InitialInterval,
                 NextStudyDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(AppConstant.InitialInterval)),
-                StartedStudying = false
+                StartedStudying = false,
+                CreatedBy = contextService.UserId
             };
             topic.Cards.Add(cardEntity);
         }

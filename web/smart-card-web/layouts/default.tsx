@@ -1,5 +1,7 @@
 import { Link } from "@nextui-org/link";
+
 import { Head } from "./head";
+
 import { Navbar } from "@/components/navbar";
 
 export default function DefaultLayout({

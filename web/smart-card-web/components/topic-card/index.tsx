@@ -5,6 +5,7 @@ import {Divider} from "@nextui-org/divider";
 
 import { GetAllTopicOutput } from "@/api/service-proxy";
 import NextLink from "next/link";
+import useUserStore from "@/stores/use-user-store";
 
 interface TopicCardProps {
   topic: GetAllTopicOutput;
@@ -12,6 +13,7 @@ interface TopicCardProps {
 
 const TopicCard = (props: TopicCardProps) => {
   const { topic } = props;
+  const { user } = useUserStore();
 
   return (
     <NextLink href={`/topic/${topic.id}`}>
@@ -29,7 +31,7 @@ const TopicCard = (props: TopicCardProps) => {
             size="sm"
             src={"https://i.pravatar.cc/150?u=a042581f4e29026024d"}
           />{" "}
-          Created by {topic.author}
+          Created by {`${user?.firstName} ${user?.lastName}`}
         </CardFooter>
       </Card>
     </NextLink>

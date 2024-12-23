@@ -1,5 +1,7 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartCard.Application.Domains.Card.Commands;
 using SmartCard.Application.Domains.Card.Queries;
@@ -12,6 +14,7 @@ namespace SmartCard.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class TopicController(IMediator sender, IMapper mapper) : ControllerBase
 {
     [ProducesResponseType(typeof(List<GetAllTopicOutput>), StatusCodes.Status200OK)]

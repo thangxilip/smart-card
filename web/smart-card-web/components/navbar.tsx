@@ -17,38 +17,27 @@ import clsx from "clsx";
 import { FiPlusCircle } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import { useDisclosure } from "@nextui-org/modal";
-import { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
 import { Avatar } from "@nextui-org/avatar";
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/dropdown";
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from "@nextui-org/dropdown";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { SearchIcon, Logo } from "@/components/icons";
 import LoginModal from "@/components/modals/login";
-import { UserModel } from "@/api/service-proxy";
-import { LOCALSTORAGE_CONSTANTS } from "@/Utils/constants";
+import useUserStore from "@/stores/use-user-store";
 
 export const Navbar = () => {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [userInfo, setUserInfo] = useState<UserModel>();
-
-  useEffect(() => {
-    const accessToken = localStorage.getItem(
-      LOCALSTORAGE_CONSTANTS.ACCESS_TOKEN,
-    );
-
-    if (accessToken) {
-      const user = jwtDecode(accessToken) as UserModel;
-
-      setUserInfo(user);
-    }
-  }, []);
+  const { user, setUser } = useUserStore();
 
   const logout = () => {
-    localStorage.removeItem(LOCALSTORAGE_CONSTANTS.ACCESS_TOKEN);
-    setUserInfo(undefined);
+    setUser(null as any);
   };
 
   const searchInput = (
@@ -119,14 +108,14 @@ export const Navbar = () => {
               Create
             </Button>
           </NavbarItem>
-          {!userInfo && (
+          {!user && (
             <NavbarItem className="hidden md:flex">
               <Button color="primary" variant="flat" onClick={onOpen}>
                 Sign in
               </Button>
             </NavbarItem>
           )}
-          {userInfo && (
+          {user && (
             <Dropdown placement="bottom-end">
               <DropdownTrigger>
                 <Avatar
@@ -134,14 +123,14 @@ export const Navbar = () => {
                   as="button"
                   className="transition-transform"
                   color="secondary"
-                  name={`${userInfo.firstName![0]}`}
+                  name={`${user.firstName![0]}`}
                   size="sm"
                 />
               </DropdownTrigger>
               <DropdownMenu aria-label="Profile Actions" variant="flat">
                 <DropdownItem key="profile" className="h-14 gap-2">
                   <p className="font-semibold">Signed in as</p>
-                  <p className="font-semibold">{userInfo.email}</p>
+                  <p className="font-semibold">{user.email}</p>
                 </DropdownItem>
                 <DropdownItem key="settings">My profile</DropdownItem>
                 <DropdownItem key="logout" color="danger" onPress={logout}>
