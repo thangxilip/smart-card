@@ -2,7 +2,7 @@ import { create } from "zustand/react";
 import { persist } from "zustand/middleware";
 
 import { UserModel } from "@/api/service-proxy";
-import { LOCALSTORAGE_CONSTANTS } from "@/Utils/constants";
+import { LOCALSTORAGE_CONSTANTS } from "@/utils/constants";
 
 interface UserStore {
   user: UserModel | null;

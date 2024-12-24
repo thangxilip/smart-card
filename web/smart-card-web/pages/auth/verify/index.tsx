@@ -4,7 +4,7 @@ import { HttpStatusCode } from "axios";
 import { jwtDecode } from "jwt-decode";
 
 import apiClient from "@/api/api-instance";
-import { LOCALSTORAGE_CONSTANTS } from "@/Utils/constants";
+import { LOCALSTORAGE_CONSTANTS } from "@/utils/constants";
 import { UserModel } from "@/api/service-proxy";
 import useUserStore from "@/stores/use-user-store";
 

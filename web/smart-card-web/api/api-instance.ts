@@ -1,9 +1,9 @@
 import { Api } from "@/api/service-proxy";
-import { LOCALSTORAGE_CONSTANTS } from "@/Utils/constants";
+import { LOCALSTORAGE_CONSTANTS } from "@/utils/constants";
 
 const apiClient = new Api({
   timeout: 1000 * 60 * 10,
-  baseURL: "https://localhost:7052",
+  baseURL: process.env.NEXT_PUBLIC_BACK_END_API,
   withCredentials: true,
 });
 
