@@ -7,6 +7,7 @@ import {
 } from "@nextui-org/modal";
 import { Button } from "@nextui-org/button";
 import { HttpStatusCode } from "axios";
+import { Image } from "@nextui-org/image";
 
 import apiClient from "@/api/api-instance";
 
@@ -40,7 +41,7 @@ const LoginModal = ({ isOpen, onOpenChange }: LoginModalProps) => {
                 className="flex items-center px-6 py-2 border rounded-full bg-white shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
                 onPress={loginWithGoogle}
               >
-                <img
+                <Image
                   alt="Google Icon"
                   className="w-5 h-5 mr-3"
                   src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"

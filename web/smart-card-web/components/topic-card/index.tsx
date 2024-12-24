@@ -1,10 +1,10 @@
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Chip } from "@nextui-org/chip";
 import { Avatar } from "@nextui-org/avatar";
-import {Divider} from "@nextui-org/divider";
+import { Divider } from "@nextui-org/divider";
+import NextLink from "next/link";
 
 import { GetAllTopicOutput } from "@/api/service-proxy";
-import NextLink from "next/link";
 import useUserStore from "@/stores/use-user-store";
 
 interface TopicCardProps {

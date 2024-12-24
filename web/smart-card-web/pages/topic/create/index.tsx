@@ -6,7 +6,7 @@ import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { FiTrash, FiPlus } from "react-icons/fi";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { nanoid } from 'nanoid';
+import { nanoid } from "nanoid";
 
 import DefaultLayout from "@/layouts/default";
 import { CreateTopicInput, BaseCardDto } from "@/api/service-proxy";

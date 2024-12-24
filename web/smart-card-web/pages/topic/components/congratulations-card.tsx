@@ -13,10 +13,10 @@ export default function CongratulationsCard() {
   return (
     <>
       <Confetti height={size.height} recycle={false} width={size.width} />
-      <Card className={'w-1/2 h-[50vh] m-auto'}>
-        <CardBody className={'flex justify-center items-center'}>
-          <h2 className={'text-lg font-medium'}>Congratulation! 🎉</h2>
-          <Spacer y={5}/>
+      <Card className={"w-1/2 h-[50vh] m-auto"}>
+        <CardBody className={"flex justify-center items-center"}>
+          <h2 className={"text-lg font-medium"}>Congratulation! 🎉</h2>
+          <Spacer y={5} />
           <p className="text-center text-md mb-6">
             You’ve finished the topic for now. Great job!
           </p>

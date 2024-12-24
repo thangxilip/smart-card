@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Card, CardBody, CardFooter, Button } from "@nextui-org/react";
 import { Spacer } from "@nextui-org/spacer";
+import { HttpStatusCode } from "axios";
 
 import DefaultLayout from "@/layouts/default";
 import { GetCardsForStudyingOutput, Score } from "@/api/service-proxy";
 import apiClient from "@/api/api-instance";
 import CongratulationsCard from "@/pages/topic/components/congratulations-card";
-import { HttpStatusCode } from "axios";
 
 const Exercise = () => {
   const router = useRouter();
@@ -39,7 +39,7 @@ const Exercise = () => {
         {
           id: cards[index].id!,
           score,
-        }
+        },
       ]);
 
       if (response.status === HttpStatusCode.Ok) {
@@ -84,10 +84,7 @@ const Exercise = () => {
             <CardFooter
               className={`flex justify-center gap-3 ${showAnswer ? "rotate-y-180" : ""}`}
             >
-              <Button
-                size={"sm"}
-                onPress={() => onNext(Score.Forgotten)}
-              >
+              <Button size={"sm"} onPress={() => onNext(Score.Forgotten)}>
                 Forgotten
               </Button>
               <Button size={"sm"} onPress={() => onNext(Score.Poor)}>

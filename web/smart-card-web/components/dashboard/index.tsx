@@ -40,8 +40,8 @@ const Dashboard = () => {
             </h1>
 
             <p className="text-gray-600 mb-6">
-              Let create your own cards and master whatever you're learning with
-              interactive flashcards.
+              Let create your own cards and master whatever you&apos;re learning
+              with interactive flashcards.
             </p>
 
             <div className="space-y-4">

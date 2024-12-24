@@ -8,13 +8,12 @@ import { Button } from "@nextui-org/react";
 import apiClient from "@/api/api-instance";
 import { GetAllTopicOutput, GetTopicByIdOutput } from "@/api/service-proxy";
 import DefaultLayout from "@/layouts/default";
-import { Tooltip } from "@nextui-org/tooltip";
 
 const TopicDetail = () => {
   const router = useRouter();
 
   const [topic, setTopic] = useState<GetTopicByIdOutput>(
-    {} as GetAllTopicOutput
+    {} as GetAllTopicOutput,
   );
 
   useEffect(() => {
@@ -50,7 +49,6 @@ const TopicDetail = () => {
           >
             Start studying
           </Button>
-
         </div>
       </div>
       <Divider />
