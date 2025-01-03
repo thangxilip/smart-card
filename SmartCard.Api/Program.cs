@@ -70,7 +70,7 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 // var allowOrigins = Configuration.GetValue<string>("AllowOrigins");
 builder.Services.AddCors(x => 
     x.AddPolicy("CorsPolicy", policyBuilder => 
-        policyBuilder.WithOrigins("http://localhost:3000", "https://google.com")
+        policyBuilder.WithOrigins("http://localhost:3000", "https://google.com", "https://smart-card-psi.vercel.app/")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()
@@ -99,12 +99,13 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    await app.InitialiseDatabaseAsync();
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// if (app.Environment.IsDevelopment())
+// {
+//     
+// }
+await app.InitialiseDatabaseAsync();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseCors("CorsPolicy");
 

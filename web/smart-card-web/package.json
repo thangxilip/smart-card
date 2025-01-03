@@ -7,6 +7,7 @@
 		"build": "next build",
 		"start": "next start",
 		"api": "NODE_TLS_REJECT_UNAUTHORIZED=0 npx swagger-typescript-api --path https://localhost:7052/swagger/v1/swagger.json --output ./api --name service-proxy.ts --axios --disableStrictSSL",
+		"api-prod": "NODE_TLS_REJECT_UNAUTHORIZED=0 npx swagger-typescript-api --path http://smart-card.site/swagger/v1/swagger.json --output ./api --name service-proxy.ts --axios --disableStrictSSL",
 		"lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix"
 	},
 	"dependencies": {

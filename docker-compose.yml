@@ -1,0 +1,34 @@
+version: '3.8'
+name: smart-card
+services:
+  smart-card-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '7052:8080'
+    # read_only: true
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      # ASPNETCORE_URLS: "https://+:4443"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: /https/smart-card-cert.pfx
+      ASPNETCORE_Kestrel__Certificates__Default__Password: 2612
+    # volumes:
+    #   - ./https/:/https
+    depends_on:
+      - db
+  db:
+    image: postgres
+    container_name: postgres_container
+    command: ["postgres", "-c", "log_statement=all"]
+    environment:
+      POSTGRES_DB: smart-card
+      POSTGRES_USER: smartcard
+      POSTGRES_PASSWORD: Hello123#
+    ports:
+      - "5431:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

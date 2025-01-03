@@ -60,7 +60,6 @@ export interface GetAllTopicOutput {
   /** @format int32 */
   numberOfCards?: number;
   avatar?: string | null;
-  author?: string | null;
 }
 
 export interface GetCardsForStudyingOutput {
@@ -274,11 +273,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Auth
      * @name GoogleGenerateLoginUrlList
      * @request GET:/Auth/google/generate-login-url
+     * @secure
      */
     googleGenerateLoginUrlList: (params: RequestParams = {}) =>
       this.request<string, any>({
         path: `/Auth/google/generate-login-url`,
         method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -289,6 +290,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Auth
      * @name GoogleExchangeCodeList
      * @request GET:/Auth/google/exchange-code
+     * @secure
      */
     googleExchangeCodeList: (
       query?: {
@@ -300,6 +302,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Auth/google/exchange-code`,
         method: "GET",
         query: query,
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -311,11 +314,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Topic
      * @name TopicList
      * @request GET:/Topic
+     * @secure
      */
     topicList: (params: RequestParams = {}) =>
       this.request<GetAllTopicOutput[], any>({
         path: `/Topic`,
         method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -326,12 +331,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Topic
      * @name TopicCreate
      * @request POST:/Topic
+     * @secure
      */
     topicCreate: (data: CreateTopicInput, params: RequestParams = {}) =>
       this.request<string, any>({
         path: `/Topic`,
         method: "POST",
         body: data,
+        secure: true,
         type: ContentType.Json,
         format: "json",
         ...params,
@@ -343,11 +350,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Topic
      * @name TopicDetail
      * @request GET:/Topic/{id}
+     * @secure
      */
     topicDetail: (id: string, params: RequestParams = {}) =>
       this.request<GetTopicByIdOutput, any>({
         path: `/Topic/${id}`,
         method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -358,12 +367,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Topic
      * @name TopicUpdate
      * @request PUT:/Topic/{id}
+     * @secure
      */
     topicUpdate: (id: string, data: UpdateTopicInput, params: RequestParams = {}) =>
       this.request<string, any>({
         path: `/Topic/${id}`,
         method: "PUT",
         body: data,
+        secure: true,
         type: ContentType.Json,
         format: "json",
         ...params,
@@ -375,11 +386,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Topic
      * @name ExerciseDetail
      * @request GET:/Topic/{id}/$exercise
+     * @secure
      */
     exerciseDetail: (id: string, params: RequestParams = {}) =>
       this.request<GetCardsForStudyingOutput[], any>({
         path: `/Topic/${id}/$exercise`,
         method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -390,12 +403,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Topic
      * @name ScorePartialUpdate
      * @request PATCH:/Topic/{id}/$score
+     * @secure
      */
     scorePartialUpdate: (id: string, data: ScoreInput[], params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/Topic/${id}/$score`,
         method: "PATCH",
         body: data,
+        secure: true,
         type: ContentType.Json,
         ...params,
       }),
@@ -407,11 +422,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags User
      * @name UserDetail
      * @request GET:/User/{email}
+     * @secure
      */
     userDetail: (email: string, params: RequestParams = {}) =>
       this.request<UserModel, any>({
         path: `/User/${email}`,
         method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
