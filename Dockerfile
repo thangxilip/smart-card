@@ -27,7 +27,7 @@ ENV DOTNET_RUNNING_IN_CONTAINER=true \
 
 COPY ./https /https
 
-EXPOSE 8080
+EXPOSE 8080 443
 # Define the entry point for the container
 ENTRYPOINT ["dotnet", "SmartCard.Api.dll"]
 
