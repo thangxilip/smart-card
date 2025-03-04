@@ -3,7 +3,7 @@ using SmartCard.Domain.Repositories.Base;
 
 namespace SmartCard.Domain.Repositories;
 
-public interface ITopicRepository : IRepository<Topic, Guid>
+public interface IReviewHistoryRepository : IRepository<ReviewHistory, Guid>
 {
-    Task<Topic?> GetIncludeStatisticsAsync(Guid id);
+    
 }

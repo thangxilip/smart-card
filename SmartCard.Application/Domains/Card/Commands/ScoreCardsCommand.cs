@@ -14,24 +14,25 @@ public class ScoreCardsCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
 {
     public async Task Handle(ScoreCardsCommand request, CancellationToken cancellationToken)
     {
-        foreach (var card in request.Cards)
-        {
-            var existingCard = await unitOfWork.CardRepository.GetAsync(x => x.TopicId == request.TopicId && x.Id == card.Id, cancellationToken) ??
-                       throw new UserFriendlyException(HttpStatusCode.BadRequest, "Card not found");
-            existingCard.EasinessFactor = CalculateEasinessFactor(existingCard.EasinessFactor, (int)card.Score);
-            existingCard.CurrentInterval = CalculateInterval(existingCard.CurrentInterval, existingCard.EasinessFactor);
-            existingCard.NextStudyDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(existingCard.CurrentInterval));
-            if (!existingCard.StartedStudying)
-            {
-                existingCard.StartedStudying = true;
-            }
-            unitOfWork.CardRepository.Update(existingCard);
-        }
-        
-        if (request.Cards.Any())
-        {
-            await unitOfWork.SaveChangesAsync(cancellationToken);
-        }
+        throw new NotImplementedException();
+        // foreach (var card in request.Cards)
+        // {
+        //     var existingCard = await unitOfWork.FlashCardRepository.GetAsync(x => x.TopicId == request.TopicId && x.Id == card.Id, cancellationToken) ??
+        //                throw new UserFriendlyException(HttpStatusCode.BadRequest, "Card not found");
+        //     existingCard.EasinessFactor = CalculateEasinessFactor(existingCard.EasinessFactor, (int)card.Score);
+        //     existingCard.CurrentInterval = CalculateInterval(existingCard.CurrentInterval, existingCard.EasinessFactor);
+        //     existingCard.NextStudyDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(existingCard.CurrentInterval));
+        //     if (!existingCard.StartedStudying)
+        //     {
+        //         existingCard.StartedStudying = true;
+        //     }
+        //     unitOfWork.FlashCardRepository.Update(existingCard);
+        // }
+        //
+        // if (request.Cards.Any())
+        // {
+        //     await unitOfWork.SaveChangesAsync(cancellationToken);
+        // }
     }
     
     private static int CalculateInterval(int currentInterval, double easinessFactor)

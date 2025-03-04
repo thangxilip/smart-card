@@ -16,7 +16,6 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
             .Build();
 
         var appConfig = configuration.Get<AppConfig>() ?? throw new NullReferenceException("Invalid configuration");
-        Console.WriteLine(appConfig.ConnectionStrings.Default);
         // var httpContextAccessor = new HttpContextAccessor();
         // var requestContext = new RequestContext(httpContextAccessor);
         // var options = Options.Create<AppConfig>(appConfig);

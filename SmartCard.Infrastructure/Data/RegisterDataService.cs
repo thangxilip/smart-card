@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
+using SmartCard.Application.Services;
 using SmartCard.Domain.Interfaces;
 using SmartCard.Domain.Repositories.Base;
 using SmartCard.Infrastructure.Identity;
@@ -26,6 +27,9 @@ public static class RegisterDataService
         services.AddScoped<IGoogleService, GoogleService>();
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ICardService, CardService>();
+        services.AddScoped<IFSRS5Scheduler, FSRS5Scheduler>();
+        services.AddScoped<IAppContextService, AppContextService>();
 
         services
             .AddIdentityCore<User>()

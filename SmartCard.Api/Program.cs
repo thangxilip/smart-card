@@ -18,7 +18,6 @@ builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"))
 builder.Services.AddHttpContextAccessor(); 
 builder.Services.AddInfrastructureServices(config.ConnectionStrings.Default, builder.Environment);
 builder.Services.AddApplicationServices();
-builder.Services.AddScoped<IAppContextService, AppContextService>();
 
 builder.Services.AddIdentity<User, Role>()
     .AddEntityFrameworkStores<AppDbContext>();

@@ -1,8 +1,6 @@
-using SmartCard.Application.Dtos.Topic;
-
 namespace SmartCard.Application.Dtos.Card;
 
-public class GetCardsForStudyingOutput : BaseCardDto
+public class GetDueCardsOutput : BaseCardDto
 {
     public string? ImagePath { get; set; }
 

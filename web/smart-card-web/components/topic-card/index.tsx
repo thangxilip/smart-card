@@ -4,11 +4,11 @@ import { Avatar } from "@nextui-org/avatar";
 import { Divider } from "@nextui-org/divider";
 import NextLink from "next/link";
 
-import { GetAllTopicOutput } from "@/api/service-proxy";
+import { GetTopicStatisticsOutput } from "@/api/service-proxy";
 import useUserStore from "@/stores/use-user-store";
 
 interface TopicCardProps {
-  topic: GetAllTopicOutput;
+  topic: GetTopicStatisticsOutput;
 }
 
 const TopicCard = (props: TopicCardProps) => {
@@ -22,7 +22,17 @@ const TopicCard = (props: TopicCardProps) => {
           <p className="text-md font-500">{topic.name}</p>
         </CardHeader>
         <CardBody>
-          <Chip className="text-xs">{topic.numberOfCards} Thuật ngữ</Chip>
+          <div className="flex gap-2">
+            <Chip className="text-xs" color={"primary"}>
+              New ({topic.newCards})
+            </Chip>
+            <Chip className="text-xs" color={"success"}>
+              Learn ({topic.learningCards})
+            </Chip>
+            <Chip className="text-xs" color={"warning"}>
+              Due ({topic.dueCards})
+            </Chip>
+          </div>
         </CardBody>
         <Divider />
         <CardFooter className="flex items-center text-xs">

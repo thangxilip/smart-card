@@ -5,16 +5,20 @@ namespace SmartCard.Domain.Repositories.Base;
 
 public interface IRepository<TEntity, TPrimaryKey> where TEntity : BaseEntity<TPrimaryKey>
 {
-    Task<IQueryable<TEntity>> GetAllAsync();
+    IQueryable<TEntity> GetAll();
+    
+    IQueryable<TEntity> GetAllIncluding(params Expression<Func<TEntity, object>>[] propertySelectors);
+
+    Task<IQueryable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> expression);
 
     Task<TEntity?> GetAsync(TPrimaryKey id, CancellationToken cancellationToken);
     
     Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken);
 
-    Task<TEntity?> GetIncludeAsync(TPrimaryKey id, params Expression<Func<TEntity, object>>[] includes);
+    Task<TEntity?> GetIncludeAsync(TPrimaryKey id, params Expression<Func<TEntity, object>>[] propertySelectors);
 
     Task<TEntity?> GetIncludeAsync(Expression<Func<TEntity, bool>> expression,
-        params Expression<Func<TEntity, object>>[] includes);
+        params Expression<Func<TEntity, object>>[] propertySelectors);
 
     Task<bool> AnyAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken);
     

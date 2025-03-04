@@ -12,7 +12,7 @@ using SmartCard.Infrastructure.Data;
 namespace SmartCard.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241210154028_InitProject")]
+    [Migration("20250226034803_InitProject")]
     partial class InitProject
     {
         /// <inheritdoc />
@@ -162,6 +162,11 @@ namespace SmartCard.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<string>("Back")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("back");
+
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
@@ -169,11 +174,6 @@ namespace SmartCard.Infrastructure.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid")
                         .HasColumnName("created_by");
-
-                    b.Property<string>("Definition")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("definition");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone")
@@ -183,18 +183,14 @@ namespace SmartCard.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("deleted_by");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.Property<string>("ImagePath")
-                        .HasColumnType("text")
-                        .HasColumnName("image_path");
-
-                    b.Property<string>("Terminology")
+                    b.Property<string>("Front")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("terminology");
+                        .HasColumnName("front");
+
+                    b.Property<Guid>("StateId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("state_id");
 
                     b.Property<Guid>("TopicId")
                         .HasColumnType("uuid")
@@ -215,6 +211,159 @@ namespace SmartCard.Infrastructure.Migrations
                         .HasDatabaseName("ix_card_topic_id");
 
                     b.ToTable("card", (string)null);
+                });
+
+            modelBuilder.Entity("SmartCard.Domain.Entities.FlashCardState", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CardId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("card_id");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("deleted_by");
+
+                    b.Property<double>("Difficulty")
+                        .HasColumnType("double precision")
+                        .HasColumnName("difficulty");
+
+                    b.Property<int>("LapseCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("lapse_count");
+
+                    b.Property<DateTime?>("LastReviewAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_review_at");
+
+                    b.Property<DateTime?>("NextReviewAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("next_review_at");
+
+                    b.Property<int>("ReviewCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("review_count");
+
+                    b.Property<double>("Stability")
+                        .HasColumnType("double precision")
+                        .HasColumnName("stability");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("updated_by");
+
+                    b.HasKey("Id")
+                        .HasName("pk_flash_card_state");
+
+                    b.HasIndex("CardId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_flash_card_state_card_id");
+
+                    b.ToTable("flash_card_state", (string)null);
+                });
+
+            modelBuilder.Entity("SmartCard.Domain.Entities.ReviewHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CardId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("card_id");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("deleted_by");
+
+                    b.Property<double>("ElapsedDays")
+                        .HasColumnType("double precision")
+                        .HasColumnName("elapsed_days");
+
+                    b.Property<double>("NewDifficulty")
+                        .HasColumnType("double precision")
+                        .HasColumnName("new_difficulty");
+
+                    b.Property<double>("NewStability")
+                        .HasColumnType("double precision")
+                        .HasColumnName("new_stability");
+
+                    b.Property<double>("PreviousDifficulty")
+                        .HasColumnType("double precision")
+                        .HasColumnName("previous_difficulty");
+
+                    b.Property<double>("PreviousStability")
+                        .HasColumnType("double precision")
+                        .HasColumnName("previous_stability");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("integer")
+                        .HasColumnName("rating");
+
+                    b.Property<DateTime>("ReviewAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("review_at");
+
+                    b.Property<double>("ScheduledDays")
+                        .HasColumnType("double precision")
+                        .HasColumnName("scheduled_days");
+
+                    b.Property<int>("TimeTaken")
+                        .HasColumnType("integer")
+                        .HasColumnName("time_taken");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("updated_by");
+
+                    b.HasKey("Id")
+                        .HasName("pk_review_history");
+
+                    b.HasIndex("CardId")
+                        .HasDatabaseName("ix_review_history_card_id");
+
+                    b.ToTable("review_history", (string)null);
                 });
 
             modelBuilder.Entity("SmartCard.Domain.Entities.Topic", b =>
@@ -333,7 +482,7 @@ namespace SmartCard.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("first_name");
 
-                    b.Property<int>("Gender")
+                    b.Property<int?>("Gender")
                         .HasColumnType("integer")
                         .HasColumnName("gender");
 
@@ -465,6 +614,36 @@ namespace SmartCard.Infrastructure.Migrations
                         .HasConstraintName("fk_card_topic_topic_id");
 
                     b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("SmartCard.Domain.Entities.FlashCardState", b =>
+                {
+                    b.HasOne("SmartCard.Domain.Entities.Card", "Card")
+                        .WithOne("State")
+                        .HasForeignKey("SmartCard.Domain.Entities.FlashCardState", "CardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_flash_card_state_card_card_id");
+
+                    b.Navigation("Card");
+                });
+
+            modelBuilder.Entity("SmartCard.Domain.Entities.ReviewHistory", b =>
+                {
+                    b.HasOne("SmartCard.Domain.Entities.Card", "Card")
+                        .WithMany()
+                        .HasForeignKey("CardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_review_history_card_card_id");
+
+                    b.Navigation("Card");
+                });
+
+            modelBuilder.Entity("SmartCard.Domain.Entities.Card", b =>
+                {
+                    b.Navigation("State")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SmartCard.Domain.Entities.Topic", b =>

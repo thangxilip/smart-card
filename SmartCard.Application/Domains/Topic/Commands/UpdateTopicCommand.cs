@@ -4,18 +4,19 @@ using SmartCard.Application.Common.Exceptions;
 using SmartCard.Application.Dtos.Card;
 using SmartCard.Application.Dtos.Topic;
 using SmartCard.Domain.Constant;
+using SmartCard.Domain.Interfaces;
 using SmartCard.Domain.Repositories.Base;
 
 namespace SmartCard.Application.Domains.Topic.Commands;
 
 public record UpdateTopicCommand(UpdateTopicInput Topic) : IRequest<Guid>;
 
-public class UpdateTopicCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateTopicCommand, Guid>
+public class UpdateTopicCommandHandler(IAppContextService contextService, IUnitOfWork unitOfWork, ICardService cardService) : IRequestHandler<UpdateTopicCommand, Guid>
 {
     public async Task<Guid> Handle(UpdateTopicCommand request, CancellationToken cancellationToken)
     {
         var topic = await unitOfWork.TopicRepository.GetIncludeAsync(request.Topic.Id);
-        if (topic is null)
+        if (topic is null || topic.CreatedBy != contextService.UserId)
         {
             throw new UserFriendlyException(HttpStatusCode.NotFound, "Topic not found");
         }
@@ -23,7 +24,7 @@ public class UpdateTopicCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler
         topic.Name = request.Topic.Name;
         topic.Description = request.Topic.Description;
         unitOfWork.TopicRepository.Update(topic);
-
+        
         foreach (var card in request.Topic.Cards)
         {
             await AddOrUpdateCard(topic.Id, card, cancellationToken);
@@ -37,32 +38,21 @@ public class UpdateTopicCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler
     {
         if (card.Id is null)
         {
-            var newCard = new Domain.Entities.Card
-            {
-                Terminology = card.Terminology,
-                Definition = card.Definition,
-                Description = card.Definition,
-                TopicId = topicId,
-                EasinessFactor = AppConstant.InitialEasinessFactor,
-                CurrentInterval = AppConstant.InitialInterval,
-                NextStudyDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(AppConstant.InitialInterval)),
-                StartedStudying = false
-            };
-            await unitOfWork.CardRepository.InsertAsync(newCard, cancellationToken);
+            await cardService.CreateCardAsync(topicId, card.Front, card.Back, cancellationToken);
             return;
         }
             
-        var existingCard = await unitOfWork.CardRepository.GetAsync(card.Id!.Value, cancellationToken);
-        if (existingCard is not null)
+        var existingCard = await unitOfWork.FlashCardRepository.GetAsync(card.Id!.Value, cancellationToken);
+        if (existingCard is not null && existingCard.CreatedBy == contextService.UserId)
         {
             if (card.IsDeleted)
             {
-                await unitOfWork.CardRepository.DeleteAsync(existingCard.Id, cancellationToken);
+                await unitOfWork.FlashCardRepository.DeleteAsync(existingCard.Id, cancellationToken);
                 return;
             }
-            existingCard.Terminology = card.Terminology;
-            existingCard.Definition = card.Definition;
-            unitOfWork.CardRepository.Update(existingCard);
+            existingCard.Front = card.Front;
+            existingCard.Back = card.Back;
+            unitOfWork.FlashCardRepository.Update(existingCard);
         }
     }
 }

@@ -5,15 +5,19 @@ import { Spacer } from "@nextui-org/spacer";
 import { HttpStatusCode } from "axios";
 
 import DefaultLayout from "@/layouts/default";
-import { GetCardsForStudyingOutput, Score } from "@/api/service-proxy";
+import {
+  CardRating,
+  GetDueCardsOutput,
+  ReviseCardCommand,
+} from "@/api/service-proxy";
 import apiClient from "@/api/api-instance";
 import CongratulationsCard from "@/pages/topic/components/congratulations-card";
 
 const Exercise = () => {
   const router = useRouter();
   const [topicId, setTopicId] = useState<string | null>(null);
-  const [cards, setCards] = useState<GetCardsForStudyingOutput[]>([]);
-  const [index, setIndex] = useState(0);
+  const [cards, setCards] = useState<GetDueCardsOutput[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
 
   useEffect(() => {
@@ -22,7 +26,7 @@ const Exercise = () => {
 
       if (topicId) {
         setTopicId(topicId);
-        apiClient.topic.exerciseDetail(topicId).then((res) => {
+        apiClient.card.getCard({ topicId }).then((res) => {
           setCards(res.data);
         });
       }
@@ -33,21 +37,19 @@ const Exercise = () => {
     setShowAnswer(true);
   };
 
-  const onNext = async (score: Score) => {
-    if (cards[index]) {
-      const response = await apiClient.topic.scorePartialUpdate(topicId!, [
-        {
-          id: cards[index].id!,
-          score,
-        },
-      ]);
+  const onNext = async (rating: CardRating) => {
+    if (cards[currentIndex]) {
+      const response = await apiClient.card.reviseCreate({
+        cardId: cards[currentIndex].id,
+        rating: rating,
+      } as ReviseCardCommand);
 
       if (response.status === HttpStatusCode.Ok) {
         setShowAnswer(false);
-        if (index < cards.length - 1) {
-          setIndex((prev) => prev + 1);
+        if (currentIndex < cards.length - 1) {
+          setCurrentIndex((prev) => prev + 1);
         } else {
-          setIndex(-1);
+          setCurrentIndex(-1);
         }
       }
     }
@@ -55,7 +57,7 @@ const Exercise = () => {
 
   return (
     <DefaultLayout>
-      {index >= 0 && (
+      {currentIndex >= 0 && (
         <Card
           className={`flex w-2/3 h-[50vh] m-auto p-10 perspective ${showAnswer ? "rotate-y-180" : ""}`}
         >
@@ -64,8 +66,8 @@ const Exercise = () => {
               className={`text-lg font-medium ${showAnswer ? "rotate-y-180" : ""}`}
             >
               {showAnswer
-                ? cards[index]?.definition
-                : cards[index]?.terminology}
+                ? cards[currentIndex]?.front
+                : cards[currentIndex]?.back}
             </h1>
           </CardBody>
           {!showAnswer && (
@@ -84,26 +86,23 @@ const Exercise = () => {
             <CardFooter
               className={`flex justify-center gap-3 ${showAnswer ? "rotate-y-180" : ""}`}
             >
-              <Button size={"sm"} onPress={() => onNext(Score.Forgotten)}>
-                Forgotten
+              <Button size={"sm"} onPress={() => onNext(CardRating.Again)}>
+                Again
               </Button>
-              <Button size={"sm"} onPress={() => onNext(Score.Poor)}>
-                Poor
+              <Button size={"sm"} onPress={() => onNext(CardRating.Hard)}>
+                Hard
               </Button>
-              <Button size={"sm"} onPress={() => onNext(Score.Moderate)}>
-                Moderate
-              </Button>
-              <Button size={"sm"} onPress={() => onNext(Score.Good)}>
+              <Button size={"sm"} onPress={() => onNext(CardRating.Good)}>
                 Good
               </Button>
-              <Button size={"sm"} onPress={() => onNext(Score.Perfect)}>
-                Perfect
+              <Button size={"sm"} onPress={() => onNext(CardRating.Easy)}>
+                Easy
               </Button>
             </CardFooter>
           )}
         </Card>
       )}
-      {index === -1 && (
+      {currentIndex === -1 && (
         <div className={"flex flex-col justify-center items-center"}>
           <CongratulationsCard /> <Spacer y={5} />
           <Button

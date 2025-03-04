@@ -6,7 +6,6 @@ namespace SmartCard.Infrastructure.Services;
 
 public class AppContextService : IAppContextService
 {
-
     public AppContextService(IHttpContextAccessor httpContextAccessor, IUserService? userService)
     {
         var userClaims = httpContextAccessor.HttpContext?.User.Claims;

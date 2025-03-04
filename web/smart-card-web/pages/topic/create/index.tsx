@@ -15,15 +15,15 @@ import apiClient from "@/api/api-instance";
 const TopicCreate = () => {
   const router = useRouter();
 
-  const [submited, setSubmited] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState<CreateTopicInput>({
     name: "",
     description: "",
     cards: [
       {
         key: nanoid(),
-        terminology: "",
-        definition: "",
+        front: "",
+        back: "",
       },
     ] as BaseCardDto[],
   });
@@ -48,8 +48,8 @@ const TopicCreate = () => {
         ...prev.cards!,
         {
           key: nanoid(),
-          terminology: "",
-          definition: "",
+          front: "",
+          back: "",
         } as BaseCardDto,
       ],
     }));
@@ -65,7 +65,7 @@ const TopicCreate = () => {
   const onSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      setSubmited(true);
+      setSubmitted(true);
       const response = await apiClient.topic.topicCreate(formData);
 
       if (response.status === 200) {
@@ -77,7 +77,7 @@ const TopicCreate = () => {
 
       toast.error("Failed to save");
     } finally {
-      setSubmited(false);
+      setSubmitted(false);
     }
   };
 
@@ -89,7 +89,7 @@ const TopicCreate = () => {
         onSubmit={onSubmit}
       >
         <div className="self-end">
-          <Button color="primary" isLoading={submited} type="submit">
+          <Button color="primary" isLoading={submitted} type="submit">
             Submit
           </Button>
         </div>
@@ -130,11 +130,11 @@ const TopicCreate = () => {
                   <Input
                     isRequired
                     errorMessage="Required"
-                    label="Terminology"
-                    name="terminology"
-                    placeholder="Enter the terminology"
+                    label="Front"
+                    name="front"
+                    placeholder="Enter the front"
                     onChange={(e) =>
-                      handleFieldChange(index, "terminology", e.target.value)
+                      handleFieldChange(index, "front", e.target.value)
                     }
                   />
                 </div>
@@ -142,11 +142,11 @@ const TopicCreate = () => {
                   <Input
                     isRequired
                     errorMessage="Required"
-                    label="Definition"
-                    name="definition"
-                    placeholder="Enter the definition"
+                    label="Back"
+                    name="back"
+                    placeholder="Enter the back"
                     onChange={(e) =>
-                      handleFieldChange(index, "definition", e.target.value)
+                      handleFieldChange(index, "back", e.target.value)
                     }
                   />
                 </div>

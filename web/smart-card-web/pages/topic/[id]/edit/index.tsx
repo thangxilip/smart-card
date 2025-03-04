@@ -88,8 +88,8 @@ const TopicEdit = () => {
         updatedCards.push({
           id: null,
           key: nanoid(),
-          terminology: "",
-          definition: "",
+          front: "",
+          back: "",
         });
       }
 
@@ -170,26 +170,26 @@ const TopicEdit = () => {
                     <div className="flex w-1/2">
                       <Input
                         isRequired
-                        defaultValue={card.terminology || ""}
+                        defaultValue={card.front || ""}
                         errorMessage="Required"
-                        label="Terminology"
-                        name="terminology"
-                        placeholder="Enter the terminology"
+                        label="Front"
+                        name="front"
+                        placeholder="Enter the front"
                         onChange={(e) =>
-                          handleFieldChange(key, "terminology", e.target.value)
+                          handleFieldChange(key, "front", e.target.value)
                         }
                       />
                     </div>
                     <div className="flex w-1/2">
                       <Input
                         isRequired
-                        defaultValue={card.definition || ""}
+                        defaultValue={card.back || ""}
                         errorMessage="Required"
-                        label="Definition"
-                        name="definition"
-                        placeholder="Enter the definition"
+                        label="Back"
+                        name="back"
+                        placeholder="Enter the back"
                         onChange={(e) =>
-                          handleFieldChange(key, "definition", e.target.value)
+                          handleFieldChange(key, "back", e.target.value)
                         }
                       />
                     </div>

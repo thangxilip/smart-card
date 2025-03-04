@@ -17,11 +17,11 @@ namespace SmartCard.Api.Controllers;
 [Authorize]
 public class TopicController(IMediator sender, IMapper mapper) : ControllerBase
 {
-    [ProducesResponseType(typeof(List<GetAllTopicOutput>), StatusCodes.Status200OK)]
-    [HttpGet]
-    public async Task<IActionResult> GetAllAsync()
+    [ProducesResponseType(typeof(List<GetTopicStatisticsOutput>), StatusCodes.Status200OK)]
+    [HttpGet("statistics")]
+    public async Task<IActionResult> GetStatisticsAsync()
     {
-        var result = await sender.Send(new GetAllTopicQuery());
+        var result = await sender.Send(new GetTopicStatisticsQuery());
         return Ok(result);
     }
     
@@ -43,10 +43,10 @@ public class TopicController(IMediator sender, IMapper mapper) : ControllerBase
     }
     
     [HttpGet("{id}/$exercise")]
-    [ProducesResponseType(typeof(List<GetCardsForStudyingOutput>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<GetDueCardsOutput>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCardsForStudyingAsync(Guid id)
     {
-        var result = await sender.Send(new GetCardsForStudyingQuery(id));
+        var result = await sender.Send(new GetDueCardsQuery(id));
         return Ok(result);
     }
     

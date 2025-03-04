@@ -34,7 +34,7 @@ namespace SmartCard.Infrastructure.Migrations
                     first_name = table.Column<string>(type: "text", nullable: false),
                     last_name = table.Column<string>(type: "text", nullable: false),
                     date_of_birth = table.Column<DateOnly>(type: "date", nullable: true),
-                    gender = table.Column<int>(type: "integer", nullable: false),
+                    gender = table.Column<int>(type: "integer", nullable: true),
                     address = table.Column<string>(type: "text", nullable: true),
                     user_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     normalized_user_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -186,11 +186,10 @@ namespace SmartCard.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    terminology = table.Column<string>(type: "text", nullable: false),
-                    definition = table.Column<string>(type: "text", nullable: false),
-                    image_path = table.Column<string>(type: "text", nullable: true),
-                    description = table.Column<string>(type: "text", nullable: true),
                     topic_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    front = table.Column<string>(type: "text", nullable: false),
+                    back = table.Column<string>(type: "text", nullable: false),
+                    state_id = table.Column<Guid>(type: "uuid", nullable: false),
                     created_by = table.Column<Guid>(type: "uuid", nullable: true),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     updated_by = table.Column<Guid>(type: "uuid", nullable: true),
@@ -205,6 +204,70 @@ namespace SmartCard.Infrastructure.Migrations
                         name: "fk_card_topic_topic_id",
                         column: x => x.topic_id,
                         principalTable: "topic",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "flash_card_state",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    card_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    difficulty = table.Column<double>(type: "double precision", nullable: false),
+                    stability = table.Column<double>(type: "double precision", nullable: false),
+                    last_review_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    next_review_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    review_count = table.Column<int>(type: "integer", nullable: false),
+                    lapse_count = table.Column<int>(type: "integer", nullable: false),
+                    status = table.Column<int>(type: "integer", nullable: false),
+                    created_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    updated_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    deleted_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_flash_card_state", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_flash_card_state_card_card_id",
+                        column: x => x.card_id,
+                        principalTable: "card",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "review_history",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    card_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    rating = table.Column<int>(type: "integer", nullable: false),
+                    review_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    time_taken = table.Column<int>(type: "integer", nullable: false),
+                    scheduled_days = table.Column<double>(type: "double precision", nullable: false),
+                    elapsed_days = table.Column<double>(type: "double precision", nullable: false),
+                    previous_difficulty = table.Column<double>(type: "double precision", nullable: false),
+                    previous_stability = table.Column<double>(type: "double precision", nullable: false),
+                    new_difficulty = table.Column<double>(type: "double precision", nullable: false),
+                    new_stability = table.Column<double>(type: "double precision", nullable: false),
+                    created_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    updated_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    deleted_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_review_history", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_review_history_card_card_id",
+                        column: x => x.card_id,
+                        principalTable: "card",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -250,6 +313,17 @@ namespace SmartCard.Infrastructure.Migrations
                 name: "ix_card_topic_id",
                 table: "card",
                 column: "topic_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_flash_card_state_card_id",
+                table: "flash_card_state",
+                column: "card_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_review_history_card_id",
+                table: "review_history",
+                column: "card_id");
         }
 
         /// <inheritdoc />
@@ -271,13 +345,19 @@ namespace SmartCard.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "card");
+                name: "flash_card_state");
+
+            migrationBuilder.DropTable(
+                name: "review_history");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "card");
 
             migrationBuilder.DropTable(
                 name: "topic");

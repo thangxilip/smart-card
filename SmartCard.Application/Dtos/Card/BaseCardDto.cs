@@ -6,7 +6,7 @@ public class BaseCardDto
     
     public string? Key { get; set; } // used for list item on FE
 
-    public string Terminology { get; set; }
-
-    public string Definition { get; set; }
+    public string Front { get; set; }
+    
+    public string Back { get; set; }
 }

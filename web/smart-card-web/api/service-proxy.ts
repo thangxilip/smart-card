@@ -13,8 +13,15 @@ export interface BaseCardDto {
   /** @format uuid */
   id?: string | null;
   key?: string | null;
-  terminology?: string | null;
-  definition?: string | null;
+  front?: string | null;
+  back?: string | null;
+}
+
+export enum CardRating {
+  Again = "Again",
+  Hard = "Hard",
+  Good = "Good",
+  Easy = "Easy",
 }
 
 export interface CreateTopicInput {
@@ -53,21 +60,12 @@ export enum Gender {
   Others = "Others",
 }
 
-export interface GetAllTopicOutput {
-  /** @format uuid */
-  id?: string;
-  name?: string | null;
-  /** @format int32 */
-  numberOfCards?: number;
-  avatar?: string | null;
-}
-
-export interface GetCardsForStudyingOutput {
+export interface GetDueCardsOutput {
   /** @format uuid */
   id?: string | null;
   key?: string | null;
-  terminology?: string | null;
-  definition?: string | null;
+  front?: string | null;
+  back?: string | null;
   imagePath?: string | null;
   description?: string | null;
 }
@@ -81,8 +79,35 @@ export interface GetTopicByIdOutput {
   canDoExercise?: boolean;
 }
 
+export interface GetTopicStatisticsOutput {
+  /** @format uuid */
+  id?: string;
+  name?: string | null;
+  /** @format int32 */
+  totalCards?: number;
+  /** @format int32 */
+  newCards?: number;
+  /** @format int32 */
+  learningCards?: number;
+  /** @format int32 */
+  reviewCards?: number;
+  /** @format int32 */
+  dueCards?: number;
+  /** @format int32 */
+  totalReviews?: number;
+  /** @format double */
+  averageStability?: number;
+  avatar?: string | null;
+}
+
 export interface LoginOutput {
   accessToken?: string | null;
+}
+
+export interface ReviseCardCommand {
+  /** @format uuid */
+  cardId?: string;
+  rating?: CardRating;
 }
 
 export enum Score {
@@ -103,8 +128,8 @@ export interface UpdateCardDto {
   /** @format uuid */
   id?: string | null;
   key?: string | null;
-  terminology?: string | null;
-  definition?: string | null;
+  front?: string | null;
+  back?: string | null;
   isDeleted?: boolean;
 }
 
@@ -307,18 +332,62 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       }),
   };
+  card = {
+    /**
+     * No description
+     *
+     * @tags Card
+     * @name ReviseCreate
+     * @request POST:/Card/revise
+     * @secure
+     */
+    reviseCreate: (data: ReviseCardCommand, params: RequestParams = {}) =>
+      this.request<boolean, any>({
+        path: `/Card/revise`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Card
+     * @name GetCard
+     * @request GET:/Card/due
+     * @secure
+     */
+    getCard: (
+      query?: {
+        /** @format uuid */
+        topicId?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<GetDueCardsOutput[], any>({
+        path: `/Card/due`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+  };
   topic = {
     /**
      * No description
      *
      * @tags Topic
-     * @name TopicList
-     * @request GET:/Topic
+     * @name StatisticsList
+     * @request GET:/Topic/statistics
      * @secure
      */
-    topicList: (params: RequestParams = {}) =>
-      this.request<GetAllTopicOutput[], any>({
-        path: `/Topic`,
+    statisticsList: (params: RequestParams = {}) =>
+      this.request<GetTopicStatisticsOutput[], any>({
+        path: `/Topic/statistics`,
         method: "GET",
         secure: true,
         format: "json",
@@ -389,7 +458,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     exerciseDetail: (id: string, params: RequestParams = {}) =>
-      this.request<GetCardsForStudyingOutput[], any>({
+      this.request<GetDueCardsOutput[], any>({
         path: `/Topic/${id}/$exercise`,
         method: "GET",
         secure: true,

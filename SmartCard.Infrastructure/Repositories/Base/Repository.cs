@@ -11,9 +11,25 @@ namespace SmartCard.Infrastructure.Repositories.Base;
 public class Repository<TEntity, TPrimaryKey>(AppDbContext context)
     : IRepository<TEntity, TPrimaryKey> where TEntity : BaseEntity<TPrimaryKey>
 {
-    public async Task<IQueryable<TEntity>> GetAllAsync()
+    public IQueryable<TEntity> GetAll()
     {
-        return await Task.FromResult(context.Set<TEntity>());
+        return context.Set<TEntity>();
+    }
+    
+    public IQueryable<TEntity> GetAllIncluding(params Expression<Func<TEntity, object>>[] propertySelectors)
+    {
+        IQueryable<TEntity> query = context.Set<TEntity>();
+        if (propertySelectors.Length <= 0)
+        {
+            return query;
+        }
+
+        return propertySelectors.Aggregate(query, (current, propertySelector) => current.Include(propertySelector));
+    }
+    
+    public async Task<IQueryable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> expression)
+    {
+        return await Task.FromResult(context.Set<TEntity>().Where(expression));
     }
     
     public async Task<TEntity?> GetAsync(TPrimaryKey id, CancellationToken cancellationToken)
@@ -27,12 +43,12 @@ public class Repository<TEntity, TPrimaryKey>(AppDbContext context)
         return await context.Set<TEntity>().FirstOrDefaultAsync(expression, cancellationToken);
     }
 
-    public async Task<TEntity?> GetIncludeAsync(TPrimaryKey id, params Expression<Func<TEntity, object>>[] includes)
+    public async Task<TEntity?> GetIncludeAsync(TPrimaryKey id, params Expression<Func<TEntity, object>>[] propertySelectors)
     {
         IQueryable<TEntity> query = context.Set<TEntity>();
-        if (includes.Length > 0)
+        if (propertySelectors.Length > 0)
         {
-            foreach (var include in includes)
+            foreach (var include in propertySelectors)
             {
                 query = query.Include(include);
             }
@@ -42,12 +58,12 @@ public class Repository<TEntity, TPrimaryKey>(AppDbContext context)
     }
 
     public async Task<TEntity?> GetIncludeAsync(Expression<Func<TEntity, bool>> expression,
-        params Expression<Func<TEntity, object>>[] includes)
+        params Expression<Func<TEntity, object>>[] propertySelectors)
     {
         IQueryable<TEntity> query = context.Set<TEntity>();
-        if (includes.Length > 0)
+        if (propertySelectors.Length > 0)
         {
-            foreach (var include in includes)
+            foreach (var include in propertySelectors)
             {
                 query = query.Include(include);
             }

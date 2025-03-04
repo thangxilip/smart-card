@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Query;
 using SmartCard.Domain.Entities;
+using SmartCard.Domain.Enums;
 using SmartCard.Infrastructure.Identity;
 
 namespace SmartCard.Infrastructure.Data;
@@ -23,9 +24,18 @@ public sealed class AppDbContext : IdentityDbContext<User, Role, Guid>
 
     public DbSet<Topic> Topics { get; set; }
     public DbSet<Card> Cards { get; set; }
+    public DbSet<FlashCardState> FlashCardStates { get; set; }
+    public DbSet<ReviewHistory> Reviews { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Card>()
+            .HasOne(c => c.State)
+            .WithOne(f => f.Card)
+            .HasForeignKey<FlashCardState>(f => f.CardId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+
         base.OnModelCreating(modelBuilder);
         ApplyQueryFilter(modelBuilder);
     }

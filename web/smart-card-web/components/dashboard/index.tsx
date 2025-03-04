@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useDisclosure } from "@nextui-org/modal";
 import { useRouter } from "next/navigation";
 
-import { GetAllTopicOutput } from "@/api/service-proxy";
+import { GetTopicStatisticsOutput } from "@/api/service-proxy";
 import TopicCard from "@/components/topic-card";
 import useUserStore from "@/stores/use-user-store";
 import apiClient from "@/api/api-instance";
@@ -13,11 +13,11 @@ const Dashboard = () => {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { user } = useUserStore();
-  const [topics, setTopics] = useState<GetAllTopicOutput[]>([]);
+  const [topics, setTopics] = useState<GetTopicStatisticsOutput[]>([]);
 
   useEffect(() => {
     if (user) {
-      apiClient.topic.topicList().then((res) => {
+      apiClient.topic.statisticsList().then((res) => {
         setTopics(res.data);
       });
     }
@@ -27,7 +27,7 @@ const Dashboard = () => {
     <>
       {user && (
         <section className="flex flex-wrap justify-center gap-4">
-          {topics.map((topic: GetAllTopicOutput) => (
+          {topics.map((topic: GetTopicStatisticsOutput) => (
             <TopicCard key={topic.id} topic={topic} />
           ))}
         </section>

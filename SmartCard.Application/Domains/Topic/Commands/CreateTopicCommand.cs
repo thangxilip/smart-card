@@ -13,7 +13,7 @@ public record CreateTopicCommand(
     string? Description,
     List<BaseCardDto> Cards) : IRequest<Guid>;
 
-public class CreateTopicCommandHandler(IUnitOfWork unitOfWork, IAppContextService contextService) : IRequestHandler<CreateTopicCommand, Guid>
+public class CreateTopicCommandHandler(IUnitOfWork unitOfWork, IAppContextService contextService, ICardService cardService) : IRequestHandler<CreateTopicCommand, Guid>
 {
     public async Task<Guid> Handle(CreateTopicCommand request, CancellationToken cancellationToken)
     {
@@ -28,28 +28,18 @@ public class CreateTopicCommandHandler(IUnitOfWork unitOfWork, IAppContextServic
         
         var topic = new Domain.Entities.Topic
         {
+            Id = Guid.NewGuid(),
             Name = request.Name,
             Description = request.Description,
             CreatedBy = contextService.UserId,
+            CreatedAt = DateTime.UtcNow,
             Cards = new List<Domain.Entities.Card>()
         };
         await unitOfWork.TopicRepository.InsertAsync(topic, cancellationToken);
-
+        
         foreach (var card in request.Cards)
         {
-            var cardEntity = new Domain.Entities.Card
-            {
-                Terminology = card.Terminology,
-                Definition = card.Definition,
-                Description = card.Definition,
-                TopicId = topic.Id,
-                EasinessFactor = AppConstant.InitialEasinessFactor,
-                CurrentInterval = AppConstant.InitialInterval,
-                NextStudyDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(AppConstant.InitialInterval)),
-                StartedStudying = false,
-                CreatedBy = contextService.UserId
-            };
-            topic.Cards.Add(cardEntity);
+            await cardService.CreateCardAsync(topic.Id, card.Front, card.Back, cancellationToken);
         }
         
         await unitOfWork.SaveChangesAsync(cancellationToken);

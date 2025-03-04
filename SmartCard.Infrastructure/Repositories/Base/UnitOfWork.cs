@@ -6,9 +6,10 @@ namespace SmartCard.Infrastructure.Repositories.Base;
 
 public class UnitOfWork(AppDbContext context) : IUnitOfWork
 {
-    public ICardRepository CardRepository { get; } = new CardRepository(context);
-    
     public ITopicRepository TopicRepository { get; } = new TopicRepository(context);
+    public IFlashCardRepository FlashCardRepository { get; } = new FlashCardRepository(context);
+    public IFlashCardStateRepository FlashCardStateRepository { get; } = new FlashCardStateRepository(context);
+    public IReviewHistoryRepository ReviewHistoryRepository { get; } = new ReviewHistoryRepository(context);
     
     public int SaveChanges() => context.SaveChanges();
     

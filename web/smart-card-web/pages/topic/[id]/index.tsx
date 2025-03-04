@@ -6,14 +6,14 @@ import { FiEdit } from "react-icons/fi";
 import { Button } from "@nextui-org/react";
 
 import apiClient from "@/api/api-instance";
-import { GetAllTopicOutput, GetTopicByIdOutput } from "@/api/service-proxy";
+import { GetTopicByIdOutput } from "@/api/service-proxy";
 import DefaultLayout from "@/layouts/default";
 
 const TopicDetail = () => {
   const router = useRouter();
 
   const [topic, setTopic] = useState<GetTopicByIdOutput>(
-    {} as GetAllTopicOutput,
+    {} as GetTopicByIdOutput,
   );
 
   useEffect(() => {
@@ -65,12 +65,12 @@ const TopicDetail = () => {
                   <div className="w-1/2 min-w-0 gap-x-4">
                     <div className="min-w-0 flex-auto">
                       <p className="text-sm/6 font-semibold text-gray-900">
-                        {card.terminology}
+                        {card.front}
                       </p>
                     </div>
                   </div>
                   <div className="w-1/2 shrink-0 sm:flex sm:flex-col items-start">
-                    <p className="text-sm/6 text-gray-900">{card.definition}</p>
+                    <p className="text-sm/6 text-gray-900">{card.back}</p>
                   </div>
                 </div>
                 <FiEdit />
